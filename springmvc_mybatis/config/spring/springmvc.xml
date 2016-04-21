@@ -1,0 +1,91 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
+
+
+	<!-- 注解解析器映射器配置 -->
+	<!--	<bean-->
+	<!--
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>
+	-->
+
+
+	<!-- 注解控制器适配器配置 -->
+	<!--	<bean-->
+	<!--
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean>
+	-->
+
+	<!--
+		使用 mvc:annotation-driven代替上边注解映射器和注解适配器配置
+		mvc:annotation-driven默认加载很多的参数绑定方法，
+		比如json转换解析器就默认加载了，如果使用mvc:annotation-driven不用配置上边的RequestMappingHandlerMapping和RequestMappingHandlerAdapter
+		实际开发时使用mvc:annotation-driven
+	-->
+	<mvc:annotation-driven validator="validator"></mvc:annotation-driven>
+
+
+
+	<!-- 扫表注解适配器定位的Handler -->
+
+	<!-- 对于注解的Handler可以单个配置
+	实际开发中建议使用组件扫描
+	 -->
+	<!-- <bean class="com.justzqh.smm.controller.ItemsController2" /> -->
+	<!-- 可以扫描controller、service、...
+	这里让扫描controller，指定controller的包
+	 -->
+	<context:component-scan base-package="com.justzqh.controller"></context:component-scan>
+
+
+	<!-- 视图解析器配置 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+		<!-- 视图解析器路径前缀 -->
+		<!-- 
+		<property name="prefix" value="/WEB-INF/web/" />
+		 -->
+		<!-- 视图解析器路径后缀 -->
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+	<!-- 校验器 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<!-- 校验器-->
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<!-- 指定校验使用的资源文件，如果不指定则默认使用classpath下的ValidationMessages.properties -->
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+	<!-- 校验错误信息配置文件 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- 资源文件名-->
+		<property name="basenames">
+			<list>
+				<value>classpath:CustomValidationMessages</value>
+			</list>
+		</property>
+		<!-- 资源文件编码格式 -->
+		<property name="fileEncodings" value="utf-8" />
+		<!-- 对资源文件内容缓存时间，单位秒 -->
+		<property name="cacheSeconds" value="120" />
+	</bean>
+
+
+
+
+</beans>

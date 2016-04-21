@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.justzqh.mapper.UserTMapperCustom">
+
+
+	<sql id="quary_user_where">
+
+		<if test="userTCustom != null">
+			<if test="userTCustom.name != null and userTCustom.name != ''">
+
+				user_t.`name` = #{userTCustom.name}
+			</if>
+		</if>
+	</sql>
+
+	<!-- 根据用户名查询记录信息 -->
+	<select id="findUserByName" parameterType="com.justzqh.po.UserTQauryVo"
+		resultType="com.justzqh.po.UserTCustom">
+
+		SELECT * FROM user_t
+		<where>
+			<include refid="quary_user_where"></include>
+		</where>
+
+	</select>
+	
+	
+	<!-- 根据Email查询记录信息 -->
+	<select id="findUserByEmail" parameterType="com.justzqh.po.UserTQauryVo"
+		resultType="com.justzqh.po.UserTCustom">
+
+		SELECT * FROM user_t 
+		
+		<where>
+			<if test="userTCustom != null">
+				<if test="userTCustom.email != null and userTCustom.email != ''">
+
+					user_t.`email` = #{userTCustom.email}
+				</if>
+			</if>
+		
+		</where>
+		
+
+	</select>
+	
+
+</mapper>
