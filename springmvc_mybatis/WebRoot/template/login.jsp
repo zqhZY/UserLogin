@@ -30,15 +30,19 @@
 				<div class="col span_2_of_3">
 				  <div class="contact-form">
 				  	<h2>Login</h2>
-					    <form method="post" action="contact-post.html">
+					    <form method="post" action="${pageContext.request.contextPath }/users/login.action">
 						    <div>
 						    	<span><label>E-mail</label></span>
-						    	<span><input name="userEmail" type="text" class="textbox"></span>
+						    	<span><input name="email" value="${userTCustom.email }"  type="text" class="textbox"></span>
+						    	
+						    	<span style="color:red">${emailError } </span>
 						    </div>
 						    <div>
 						     	<span><label>PassWord</label></span>
-						    	<span><input name="passWord" type="text" class="textbox"></span>
+						    	<span><input name="password" value="${userTCustom.password }" type="text" class="textbox"></span>
 						    </div>
+						    
+						    <span style="color:red" >${passwdError } </span>
 						   <div>
 						   		<span><input type="submit" value="Submit"  class="mybutton"></span>
 						  </div>

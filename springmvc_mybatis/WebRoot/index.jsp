@@ -10,7 +10,16 @@
 
  	<div class="header">
  		
- 		<%@ include file="./publictemp/headertop_desc.jsp" %>
+ 		<c:if test="${userTCustom != null}">	
+ 	
+ 			<%@ include file="./publictemp/headtop_desc_logined.jsp" %>
+ 			
+ 		</c:if>
+ 		<c:if test="${userTCustom == null}">
+ 			<%@ include file="./publictemp/headertop_desc.jsp" %>
+ 		</c:if>
+ 				 		
+ 		
  		<div class="wrap">
  			<%@ include file="./publictemp/header_top.jsp" %>
  			<%@ include file="./publictemp/head_bottom.jsp" %>

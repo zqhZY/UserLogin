@@ -30,6 +30,26 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	
+	/**
+	 * 
+	* @Title: Index
+	* @author: zqh
+	* @date 2016-4-22 上午11:43:36
+	* @Description:home页面跳转，用于传递用户登陆信息，标记已登陆状态 
+	* @param model
+	* @param userTCustom
+	* @return
+	*
+	 */
+	@RequestMapping("/index")
+	public String Index(Model model, UserTCustom userTCustom) {
+
+		model.addAttribute("userTCustom", userTCustom);
+		return "/index";
+	}
+	
+	
 	/**
 	 * 
 	* @Title: loginUserSubmit
@@ -42,21 +62,87 @@ public class UserController {
 	*
 	 */
 	@RequestMapping("/login")
-	public String loginUserSubmit(UserTCustom userTCustom)throws Exception{
+	public String loginUserSubmit(Model model,@Validated UserTCustom userTCustom , BindingResult bindingResult)throws Exception{
 		
-		
-		return "success";
-	}
-	
-	
-	
-	
-	@RequestMapping("/registerEdit")
-	public String registerUserEdit() throws Exception{
+		if(bindingResult.hasErrors()){
 			
-		//重定向到主页
-		return "redirect:http://localhost:8080/springmvc_mybatis/";
+			String emailError = null;
+			
+			List<ObjectError> allErrors = bindingResult.getAllErrors();
+			for(ObjectError error:allErrors){
+				
+				String errorType = error.getCodes()[1];
+				System.out.println(errorType);
+				
+				if(errorType.equals("Size.email")){
+					
+					emailError = "Email should not empty,and have limited size!";
+				}
+			}			
+			model.addAttribute("emailError", emailError);
+			
+			return "/template/login";//跳转到注册页面
+			
+			
+		}
+		else {
+			
+			UserTQauryVo userTQauryVo = new UserTQauryVo();
+			userTQauryVo.setUserTCustom(userTCustom);
+			
+			UserTCustom userT = userService.findUserByEmail(userTQauryVo); 
+			if(userT != null){
+				
+				//有此用户
+				boolean isSuitable = userT.getPassword().equals(userTCustom.getPassword());
+				if(isSuitable){
+					
+					//成功登陆
+					model.addAttribute("userTCustom", userT);
+					return "/index";
+				}
+				else{
+					
+					//返回密码错误
+					String passwdError = "Email or password input error!";
+					model.addAttribute("passwdError", passwdError);
+					return "/template/login";
+				}
+			}
+			else {
+				
+				//无此用户，返回无此用户
+				String emialError = "This emial has not existed!";
+				model.addAttribute("emailError", emialError);
+				return "/template/login";
+				
+			}
+			
+			
+		}	
+		
 	}
+	
+	
+	/**
+	 * 
+	* @Title: LoginOut
+	* @author: zqh
+	* @date 2016-4-22 上午11:24:33
+	* @Description:用户退出登录，清除用户信息，返回到home页面 
+	* @param model
+	* @param userTCustom
+	* @return
+	*
+	 */
+	@RequestMapping("/loginout")
+	public String LoginOut(Model model , UserTCustom userTCustom) {
+		
+		userTCustom = null;
+		model.addAttribute("userTCustom", userTCustom);
+		return "/index";		
+	}
+	
 	
 	/**
 	 * 

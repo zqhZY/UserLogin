@@ -11,7 +11,7 @@
 						<ul>
 							<li><a href="${pageContext.request.contextPath}/template/register.jsp">Register</a></li>
 							<li><a href="${pageContext.request.contextPath}/template/login.jsp">Login</a></li>
-							<li><a href="preview.html">Delivery</a></li>
+							<li><a href="#">Delivery</a></li>
 							<li><a href="#">Checkout</a></li>
 							<li><a href="#">My Account</a></li>
 						</ul>
