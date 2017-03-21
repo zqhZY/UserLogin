@@ -1,2 +1,2 @@
 # UserLogin
-Springmvc+MyBatise实现用户注册与登录
+User login in and regester using Springmvc+MyBatis
